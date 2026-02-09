@@ -6,1016 +6,337 @@
     <title>Ayelet Hashachar | Art Portfolio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap');
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --purple: #8B5E3C;
+            --brown: #8B5E3C;
             --pink: #D4728C;
             --gold: #C9956B;
-            --teal: #A67B5B;
+            --warm: #A67B5B;
             --dark: #2B1B12;
             --cream: #FFF0E6;
+            --mid: #3D2417;
+            --deep: #4A2C1A;
         }
-
         html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark);
-            color: #fff;
-            overflow-x: hidden;
+        /* RTL support */
+        body.rtl { direction: rtl; text-align: right; }
+        body.rtl .nav-links { direction: rtl; }
+        body.rtl .stats { direction: rtl; }
+        body.rtl .gallery-filter { direction: rtl; }
+        body.rtl .canvas-controls { direction: rtl; }
+        body.rtl .form-group { text-align: right; }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9990;
+            display: flex;
+            gap: 0;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.15);
         }
+        body.rtl .lang-toggle { right: auto; left: 30px; }
+        .lang-btn {
+            padding: 12px 20px;
+            background: rgba(43,27,18,0.9);
+            backdrop-filter: blur(10px);
+            color: rgba(255,255,255,0.6);
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .lang-btn.active {
+            background: var(--pink);
+            color: #fff;
+        }
+        .lang-btn:hover:not(.active) { background: rgba(212,114,140,0.3); }
 
         /* Custom Cursor */
-        .custom-cursor {
-            width: 20px; height: 20px;
-            border: 2px solid var(--pink);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.15s ease, background 0.15s ease;
-            mix-blend-mode: difference;
-        }
-        .custom-cursor.hover {
-            transform: scale(2);
-            background: rgba(232, 67, 147, 0.3);
-        }
+        .custom-cursor { width: 20px; height: 20px; border: 2px solid var(--pink); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.15s ease, background 0.15s ease; mix-blend-mode: difference; }
+        .custom-cursor.hover { transform: scale(2); background: rgba(212,114,140,0.3); }
 
         /* Navigation */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.4s ease, padding 0.4s ease;
-        }
-        nav.scrolled {
-            background: rgba(43, 27, 18, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 12px 40px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-        }
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--pink), var(--purple), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
-        }
-        .nav-links { display: flex; gap: 24px; list-style: none; }
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 400;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            position: relative;
-            padding-bottom: 4px;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0; height: 2px;
-            background: linear-gradient(90deg, var(--pink), var(--gold));
-            transition: width 0.3s ease;
-        }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; transition: background 0.4s ease, padding 0.4s ease; }
+        nav.scrolled { background: rgba(43,27,18,0.95); backdrop-filter: blur(20px); padding: 12px 40px; box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; background: linear-gradient(135deg, var(--pink), var(--brown), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; white-space: nowrap; }
+        .nav-links { display: flex; gap: 22px; list-style: none; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 400; font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; position: relative; padding-bottom: 4px; }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width 0.3s ease; }
         .nav-links a:hover::after { width: 100%; }
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 28px; height: 2px; background: #fff; transition: all 0.3s ease; }
 
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        .menu-toggle span {
-            width: 28px; height: 2px;
-            background: #fff;
-            transition: all 0.3s ease;
-        }
+        /* Hero */
+        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .hero-bg { position: absolute; inset: 0; background: url('ayelet.jpeg') center/cover no-repeat; filter: brightness(0.35) contrast(1.1); transform: scale(1.1); }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(139,94,60,0.4), rgba(212,114,140,0.35), rgba(43,27,18,0.7)); }
+        .hero-content { position: relative; text-align: center; z-index: 2; animation: fadeInUp 1.2s ease; }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 6.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 8px; background: linear-gradient(135deg, #fff, var(--cream), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-alterman { font-family: 'Playfair Display', serif; font-size: clamp(0.9rem, 2vw, 1.2rem); font-style: italic; color: rgba(255,255,255,0.7); margin-bottom: 25px; letter-spacing: 1px; direction: rtl; }
+        .hero-content .subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.5vw, 1.5rem); font-style: italic; color: rgba(255,255,255,0.75); margin-bottom: 25px; letter-spacing: 3px; }
+        .hero-content .tagline { font-size: 0.9rem; color: rgba(255,255,255,0.55); letter-spacing: 4px; text-transform: uppercase; }
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: bounce 2s infinite; }
+        .scroll-indicator span { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+        .scroll-indicator .arrow { width: 24px; height: 24px; border-right: 2px solid rgba(255,255,255,0.5); border-bottom: 2px solid rgba(255,255,255,0.5); transform: rotate(45deg); }
+        .paint-splatter { position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.15; animation: float 8s ease-in-out infinite; pointer-events: none; }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: url('ayelet.jpeg') center/cover no-repeat;
-            filter: brightness(0.35) contrast(1.1);
-            transform: scale(1.1);
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(139,94,60,0.4), rgba(212,114,140,0.35), rgba(43,27,18,0.7));
-        }
-        .hero-content {
-            position: relative;
-            text-align: center;
-            z-index: 2;
-            animation: fadeInUp 1.2s ease;
-        }
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #fff, var(--cream), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-content .subtitle {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1rem, 2.5vw, 1.6rem);
-            font-style: italic;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 30px;
-            letter-spacing: 3px;
-        }
-        .hero-content .tagline {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.6);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-        }
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            animation: bounce 2s infinite;
-        }
-        .scroll-indicator span {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-        }
-        .scroll-indicator .arrow {
-            width: 24px; height: 24px;
-            border-right: 2px solid rgba(255,255,255,0.5);
-            border-bottom: 2px solid rgba(255,255,255,0.5);
-            transform: rotate(45deg);
-        }
-
-        .paint-splatter {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.15;
-            animation: float 8s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Section Styles */
+        /* Sections */
         section { padding: 100px 40px; position: relative; }
         .section-header { text-align: center; margin-bottom: 70px; }
-        .section-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 900;
-            margin-bottom: 15px;
-        }
-        .section-header p {
-            color: rgba(255,255,255,0.6);
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, var(--pink), var(--purple), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 15px; }
+        .section-header p { color: rgba(255,255,255,0.6); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+        .gradient-text { background: linear-gradient(135deg, var(--pink), var(--brown), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-        /* About Section */
-        #about { background: linear-gradient(180deg, var(--dark), #3D2417); }
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: center;
-        }
-        .about-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            position: relative;
-        }
-        .about-images img {
-            width: 100%;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            object-fit: cover;
-        }
-        .about-images img:first-child {
-            grid-column: 1 / -1;
-            height: 300px;
-        }
-        .about-images img:nth-child(2),
-        .about-images img:nth-child(3) {
-            height: 200px;
-        }
-        .about-images::before {
-            content: '';
-            position: absolute;
-            inset: -10px;
-            border-radius: 25px;
-            background: linear-gradient(135deg, var(--pink), var(--purple), var(--gold));
-            z-index: -1;
-            opacity: 0.4;
-            filter: blur(25px);
-        }
-        .about-text h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        .about-text p {
-            color: rgba(255,255,255,0.7);
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
+        /* About */
+        #about { background: linear-gradient(180deg, var(--dark), var(--mid)); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; align-items: center; }
+        .about-images { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; position: relative; }
+        .about-images img { width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); object-fit: cover; }
+        .about-images img:first-child { grid-column: 1 / -1; height: 300px; }
+        .about-images img:nth-child(2), .about-images img:nth-child(3) { height: 200px; }
+        .about-images::before { content: ''; position: absolute; inset: -10px; border-radius: 25px; background: linear-gradient(135deg, var(--pink), var(--brown), var(--gold)); z-index: -1; opacity: 0.4; filter: blur(25px); }
+        .about-text h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px; }
+        .about-text p { color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 15px; }
         .stats { display: flex; gap: 40px; margin-top: 30px; }
         .stat-item { text-align: center; }
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--gold);
-        }
-        .stat-label {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .stat-number { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+        .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Gallery Section */
-        #gallery { background: linear-gradient(180deg, #3D2417, var(--dark)); }
-        .gallery-filter {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            padding: 8px 22px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.03);
-            color: rgba(255,255,255,0.7);
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--pink);
-            border-color: var(--pink);
-            color: #fff;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .gallery-card {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 3/4;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-        }
-        .gallery-card.hidden {
-            display: none;
-        }
-        .gallery-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease, filter 0.6s ease;
-        }
-        .gallery-card:hover img {
-            transform: scale(1.08);
-            filter: brightness(0.7);
-        }
-        .card-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(43,27,18,0.95) 0%, transparent 60%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 25px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
+        /* Gallery */
+        #gallery { background: linear-gradient(180deg, var(--mid), var(--dark)); }
+        .gallery-filter { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 20px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.7); border-radius: 50px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s ease; }
+        .filter-btn:hover, .filter-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .gallery-card { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; aspect-ratio: 3/4; transition: transform 0.4s ease; }
+        .gallery-card.hidden { display: none; }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease, filter 0.6s ease; }
+        .gallery-card:hover img { transform: scale(1.08); filter: brightness(0.7); }
+        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(43,27,18,0.95) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; opacity: 0; transition: opacity 0.4s ease; }
         .gallery-card:hover .card-overlay { opacity: 1; }
-        .card-overlay h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            margin-bottom: 6px;
-        }
-        .card-overlay p { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
-        .card-overlay .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(232,67,147,0.3);
-            border: 1px solid rgba(232,67,147,0.5);
-            border-radius: 50px;
-            font-size: 0.7rem;
-            color: var(--pink);
-            margin-top: 10px;
-            width: fit-content;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .card-overlay h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 4px; }
+        .card-overlay p { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+        .card-overlay .badge { display: inline-block; padding: 3px 10px; background: rgba(212,114,140,0.3); border: 1px solid rgba(212,114,140,0.5); border-radius: 50px; font-size: 0.65rem; color: var(--pink); margin-top: 8px; width: fit-content; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Lightbox */
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
+        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .lightbox.active { display: flex; }
-        .lightbox img {
-            max-width: 85vw;
-            max-height: 82vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            animation: zoomIn 0.4s ease;
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 25px; right: 25px;
-            width: 48px; height: 48px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
+        .lightbox img { max-width: 85vw; max-height: 82vh; object-fit: contain; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: zoomIn 0.4s ease; }
+        .lightbox-close { position: absolute; top: 25px; right: 25px; width: 48px; height: 48px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
         .lightbox-close:hover { background: var(--pink); border-color: var(--pink); }
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px; height: 48px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .lightbox-nav:hover { background: var(--purple); border-color: var(--purple); }
+        .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .lightbox-nav:hover { background: var(--brown); border-color: var(--brown); }
         .lightbox-prev { left: 25px; }
         .lightbox-next { right: 25px; }
-        .lightbox-caption {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
+        .lightbox-caption { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); text-align: center; }
         .lightbox-caption h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px; }
         .lightbox-caption p { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
 
-        /* Videos Section */
-        #videos { background: linear-gradient(180deg, var(--dark), #3D2417); }
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .video-card {
-            border-radius: 16px;
-            overflow: hidden;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .video-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-        }
-        .video-card video {
-            width: 100%;
-            display: block;
-            aspect-ratio: 9/16;
-            max-height: 450px;
-            object-fit: cover;
-            background: #000;
-        }
-        .video-card.landscape video {
-            aspect-ratio: 16/9;
-            max-height: 300px;
-        }
-        .video-info {
-            padding: 18px 20px;
-        }
-        .video-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        .video-info p {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-        }
+        /* Videos */
+        #videos { background: linear-gradient(180deg, var(--dark), var(--mid)); }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1400px; margin: 0 auto; }
+        .video-card { border-radius: 16px; overflow: hidden; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .video-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        .video-card video { width: 100%; display: block; aspect-ratio: 9/16; max-height: 420px; object-fit: cover; background: #000; }
+        .video-info { padding: 15px 18px; }
+        .video-info h3 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 4px; }
+        .video-info p { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
 
-        /* Memory Game Section */
-        #game {
-            background: linear-gradient(180deg, #3D2417, #4A2C1A);
-            text-align: center;
-        }
-        .game-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-        .game-stat {
-            text-align: center;
-        }
-        .game-stat-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--gold);
-        }
-        .game-stat-label {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .memory-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            max-width: 600px;
-            margin: 0 auto 25px;
-        }
-        .memory-card {
-            aspect-ratio: 3/4;
-            perspective: 800px;
-            cursor: pointer;
-        }
-        .memory-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-            border-radius: 12px;
-        }
-        .memory-card.flipped .memory-card-inner,
-        .memory-card.matched .memory-card-inner {
-            transform: rotateY(180deg);
-        }
-        .memory-card-front, .memory-card-back {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .memory-card-back {
-            background: linear-gradient(135deg, #8B5E3C, #D4728C);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        .memory-card-back::after {
-            content: '?';
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: rgba(255,255,255,0.4);
-        }
-        .memory-card-front {
-            transform: rotateY(180deg);
-        }
-        .memory-card-front img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .memory-card.matched .memory-card-inner {
-            box-shadow: 0 0 20px rgba(249,168,37,0.5);
-        }
-        .memory-card.matched .memory-card-back {
-            border-color: var(--gold);
-        }
-        .game-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            border: none;
-            border-radius: 50px;
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            letter-spacing: 1px;
-        }
-        .game-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(232,67,147,0.3);
-        }
-        .game-win-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 9998;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
+        /* Game */
+        #game { background: linear-gradient(180deg, var(--mid), var(--deep)); text-align: center; }
+        .game-stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+        .game-stat { text-align: center; }
+        .game-stat-value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); }
+        .game-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+        .memory-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 600px; margin: 0 auto 25px; }
+        .memory-card { aspect-ratio: 3/4; perspective: 800px; cursor: pointer; }
+        .memory-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s ease; border-radius: 12px; }
+        .memory-card.flipped .memory-card-inner, .memory-card.matched .memory-card-inner { transform: rotateY(180deg); }
+        .memory-card-front, .memory-card-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; overflow: hidden; }
+        .memory-card-back { background: linear-gradient(135deg, #8B5E3C, #D4728C); display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.1); }
+        .memory-card-back::after { content: '?'; font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: rgba(255,255,255,0.4); }
+        .memory-card-front { transform: rotateY(180deg); }
+        .memory-card-front img { width: 100%; height: 100%; object-fit: cover; }
+        .memory-card.matched .memory-card-inner { box-shadow: 0 0 20px rgba(201,149,107,0.5); }
+        .game-btn { padding: 12px 30px; background: linear-gradient(135deg, var(--pink), var(--brown)); border: none; border-radius: 50px; color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .game-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(212,114,140,0.3); }
+        .game-win-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9998; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .game-win-modal.active { display: flex; }
-        .win-content {
-            text-align: center;
-            animation: zoomIn 0.5s ease;
-        }
-        .win-content h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        .win-content p {
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-        }
+        .win-content { text-align: center; animation: zoomIn 0.5s ease; }
+        .win-content h2 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; }
+        .win-content p { color: rgba(255,255,255,0.7); margin-bottom: 25px; font-size: 1.1rem; }
         .win-stars { font-size: 3rem; margin-bottom: 20px; }
 
-        /* Color Palette Section */
-        #palette { background: linear-gradient(180deg, #4A2C1A, var(--dark)); }
+        /* Palettes */
+        #palette { background: linear-gradient(180deg, var(--deep), var(--dark)); }
         .palette-container { max-width: 1000px; margin: 0 auto; }
-        .palette-artwork {
-            margin-bottom: 40px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
-            padding: 25px 30px;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: transform 0.3s ease;
-        }
+        .palette-artwork { margin-bottom: 35px; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 22px 28px; border: 1px solid rgba(255,255,255,0.06); transition: transform 0.3s ease; }
         .palette-artwork:hover { transform: translateY(-5px); }
-        .palette-artwork h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            margin-bottom: 16px;
-        }
+        .palette-artwork h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 14px; }
         .color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
-        .swatch {
-            width: 55px; height: 55px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        .swatch:hover {
-            transform: scale(1.2);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-        .swatch .tooltip {
-            position: absolute;
-            bottom: -28px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.65rem;
-            color: rgba(255,255,255,0.6);
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        .swatch { width: 50px; height: 50px; border-radius: 12px; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; border: 2px solid rgba(255,255,255,0.1); }
+        .swatch:hover { transform: scale(1.2); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+        .swatch .tooltip { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: rgba(255,255,255,0.6); white-space: nowrap; opacity: 0; transition: opacity 0.3s ease; }
         .swatch:hover .tooltip { opacity: 1; }
-        .copy-toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--purple);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            z-index: 9999;
-            transition: transform 0.4s ease;
-            box-shadow: 0 10px 30px rgba(107,63,160,0.4);
-        }
+        .copy-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--brown); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; z-index: 9999; transition: transform 0.4s ease; box-shadow: 0 10px 30px rgba(139,94,60,0.4); }
         .copy-toast.show { transform: translateX(-50%) translateY(0); }
 
-        /* Drawing Canvas Section */
-        #canvas-section {
-            background: linear-gradient(180deg, var(--dark), #4A2C1A);
-            text-align: center;
-        }
+        /* Canvas */
+        #canvas-section { background: linear-gradient(180deg, var(--dark), var(--deep)); text-align: center; }
         .canvas-container { max-width: 900px; margin: 0 auto; }
-        .canvas-wrapper {
-            position: relative;
-            display: inline-block;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            border: 2px solid rgba(255,255,255,0.1);
-        }
+        .canvas-wrapper { position: relative; display: inline-block; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); }
         #drawingCanvas { display: block; background: #fff; cursor: crosshair; }
-        .canvas-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-            padding: 18px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .canvas-controls label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
-        }
-        .canvas-controls input[type="color"] {
-            width: 38px; height: 38px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            background: none;
-        }
+        .canvas-controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; padding: 18px; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); }
+        .canvas-controls label { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+        .canvas-controls input[type="color"] { width: 38px; height: 38px; border: none; border-radius: 10px; cursor: pointer; background: none; }
         .canvas-controls input[type="range"] { width: 90px; accent-color: var(--pink); }
-        .canvas-btn {
-            padding: 8px 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-        }
+        .canvas-btn { padding: 8px 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; border-radius: 50px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s ease; }
         .canvas-btn:hover { background: var(--pink); border-color: var(--pink); }
-        .canvas-btn.active { background: var(--purple); border-color: var(--purple); }
+        .canvas-btn.active { background: var(--brown); border-color: var(--brown); }
 
         /* Quote */
-        #quote {
-            background: linear-gradient(135deg, #5C3326, var(--dark));
-            text-align: center;
-            padding: 120px 40px;
-        }
+        #quote { background: linear-gradient(135deg, #5C3326, var(--dark)); text-align: center; padding: 120px 40px; }
         .quote-content { max-width: 800px; margin: 0 auto; }
-        .quote-mark {
-            font-family: 'Playfair Display', serif;
-            font-size: 6rem;
-            line-height: 1;
-            color: var(--pink);
-            opacity: 0.5;
-        }
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.3rem, 3vw, 2rem);
-            font-style: italic;
-            line-height: 1.6;
-            margin: -30px 0 20px;
-            color: rgba(255,255,255,0.9);
-        }
-        .quote-author {
-            font-size: 0.9rem;
-            color: var(--gold);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+        .quote-mark { font-family: 'Playfair Display', serif; font-size: 6rem; line-height: 1; color: var(--pink); opacity: 0.5; }
+        .quote-text { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 3vw, 2rem); font-style: italic; line-height: 1.6; margin: -30px 0 20px; color: rgba(255,255,255,0.9); }
+        .quote-author { font-size: 0.9rem; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; }
 
-        /* Contact Section */
-        #contact {
-            background: linear-gradient(180deg, #4A2C1A, #1A0E08);
-            text-align: center;
-        }
+        /* Contact */
+        #contact { background: linear-gradient(180deg, var(--deep), #1A0E08); text-align: center; }
         .contact-form { max-width: 600px; margin: 0 auto; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 8px;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            transition: border-color 0.3s ease, background 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--pink);
-            background: rgba(255,255,255,0.08);
-        }
+        .form-group label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: border-color 0.3s ease; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--pink); background: rgba(255,255,255,0.08); }
         .form-group textarea { min-height: 140px; resize: vertical; }
-        .submit-btn {
-            padding: 15px 50px;
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            border: none;
-            border-radius: 50px;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(232,67,147,0.3);
-        }
+        .submit-btn { padding: 15px 50px; background: linear-gradient(135deg, var(--pink), var(--brown)); border: none; border-radius: 50px; color: #fff; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(212,114,140,0.3); }
 
         /* Footer */
-        footer {
-            background: #1A0E08;
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        footer { background: #1A0E08; padding: 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
         footer p { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
         footer .heart { color: var(--pink); }
 
         /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-        @keyframes float {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            33% { transform: translate(30px,-20px) scale(1.1); }
-            66% { transform: translate(-20px,15px) scale(0.9); }
-        }
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+        @keyframes float { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-20px) scale(1.1); } 66% { transform: translate(-20px,15px) scale(0.9); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
         /* Responsive */
         @media (max-width: 768px) {
             nav { padding: 15px 20px; }
-            .nav-links {
-                position: fixed;
-                top: 0; right: -100%;
-                width: 280px; height: 100vh;
-                background: rgba(43,27,18,0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                justify-content: center;
-                padding: 40px;
-                transition: right 0.4s ease;
-            }
+            .nav-links { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: rgba(43,27,18,0.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; padding: 40px; transition: right 0.4s ease; }
             .nav-links.open { right: 0; }
             .menu-toggle { display: flex; }
             section { padding: 60px 20px; }
             .about-grid { grid-template-columns: 1fr; gap: 30px; }
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
             .video-grid { grid-template-columns: 1fr; }
             .memory-board { grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 100%; }
             .stats { gap: 20px; }
             .custom-cursor { display: none; }
             .lightbox-nav { display: none; }
         }
-
         @media (max-width: 480px) {
-            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .swatch { width: 42px; height: 42px; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .swatch { width: 40px; height: 40px; }
             .memory-board { gap: 6px; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Custom Cursor -->
     <div class="custom-cursor" id="cursor"></div>
+
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="enBtn" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="heBtn" onclick="setLang('he')">HE</button>
+    </div>
 
     <!-- Navigation -->
     <nav id="navbar">
         <div class="logo">AYELET HASHACHAR</div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#about">About</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#videos">Videos</a></li>
-            <li><a href="#game">Game</a></li>
-            <li><a href="#canvas-section">Create</a></li>
-            <li><a href="#palette">Palettes</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-en="About" data-he="אודות">About</a></li>
+            <li><a href="#gallery" data-en="Gallery" data-he="גלריה">Gallery</a></li>
+            <li><a href="#videos" data-en="Videos" data-he="סרטונים">Videos</a></li>
+            <li><a href="#game" data-en="Game" data-he="משחק">Game</a></li>
+            <li><a href="#canvas-section" data-en="Create" data-he="ציור">Create</a></li>
+            <li><a href="#palette" data-en="Palettes" data-he="פלטות">Palettes</a></li>
+            <li><a href="#contact" data-en="Contact" data-he="צור קשר">Contact</a></li>
         </ul>
-        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </div>
+        <div class="menu-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero" id="hero">
         <div class="hero-bg" id="heroBg"></div>
         <div class="hero-overlay"></div>
-        <div class="paint-splatter" style="width:300px;height:300px;background:var(--purple);top:10%;left:10%;animation-delay:0s;"></div>
+        <div class="paint-splatter" style="width:300px;height:300px;background:var(--brown);top:10%;left:10%;"></div>
         <div class="paint-splatter" style="width:200px;height:200px;background:var(--pink);top:60%;right:15%;animation-delay:2s;"></div>
         <div class="paint-splatter" style="width:250px;height:250px;background:var(--gold);bottom:10%;left:30%;animation-delay:4s;"></div>
         <div class="hero-content">
             <h1>Ayelet Hashachar</h1>
-            <p class="subtitle">Where Colors Tell Stories</p>
-            <p class="tagline">Mixed Media &bull; Pop Art &bull; Abstract &bull; Portraits</p>
+            <p class="hero-alterman">"&#1490;&#1501; &#1500;&#1502;&#1512;&#1492; &#1504;&#1493;&#1513;&#1503; &#1497;&#1513; &#1512;&#1490;&#1506; &#1513;&#1500; &#1492;&#1493;&#1500;&#1491;&#1514;" (&#1504;. &#1488;&#1500;&#1514;&#1512;&#1502;&#1503;)</p>
+            <p class="subtitle" data-en="Where Colors Tell Stories" data-he="&#1488;&#1497;&#1508;&#1492; &#1513;&#1510;&#1489;&#1506;&#1497;&#1501; &#1502;&#1505;&#1508;&#1512;&#1497;&#1501; &#1505;&#1497;&#1508;&#1493;&#1512;&#1497;&#1501;">Where Colors Tell Stories</p>
+            <p class="tagline" data-en="Mixed Media &bull; Pop Art &bull; Abstract &bull; Portraits" data-he="&#1502;&#1491;&#1497;&#1492; &#1502;&#1513;&#1493;&#1500;&#1489;&#1514; &bull; &#1508;&#1493;&#1508; &#1488;&#1512;&#1496; &bull; &#1488;&#1489;&#1505;&#1496;&#1512;&#1511;&#1496; &bull; &#1491;&#1497;&#1493;&#1511;&#1504;&#1488;&#1493;&#1514;">Mixed Media &bull; Pop Art &bull; Abstract &bull; Portraits</p>
         </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="arrow"></div>
-        </div>
+        <div class="scroll-indicator"><span data-en="Scroll" data-he="&#1490;&#1500;&#1493;&#1500;">Scroll</span><div class="arrow"></div></div>
     </section>
 
-    <!-- About Section -->
+    <!-- About -->
     <section id="about">
         <div class="section-header reveal">
-            <h2>Meet <span class="gradient-text">Ayelet Hashachar</span></h2>
-            <p>Art, music, literature, and a soul full of colors</p>
+            <h2 data-en="Meet <span class='gradient-text'>Ayelet Hashachar</span>" data-he="&#1492;&#1499;&#1497;&#1512;&#1493; &#1488;&#1514; <span class='gradient-text'>&#1488;&#1497;&#1497;&#1500;&#1514; &#1492;&#1513;&#1495;&#1512;</span>">Meet <span class="gradient-text">Ayelet Hashachar</span></h2>
+            <p data-en="Art, music, literature, and a soul full of colors" data-he="&#1488;&#1493;&#1502;&#1504;&#1493;&#1514;, &#1502;&#1493;&#1494;&#1497;&#1511;&#1492;, &#1505;&#1508;&#1512;&#1493;&#1514;, &#1493;&#1504;&#1513;&#1502;&#1492; &#1502;&#1500;&#1488;&#1492; &#1510;&#1489;&#1506;&#1497;&#1501;">Art, music, literature, and a soul full of colors</p>
         </div>
         <div class="about-grid">
             <div class="about-images reveal">
-                <img src="2.jpeg" alt="Ayelet in her studio">
+                <img src="photos%20and%20videos/IMG_2377.jpeg" alt="Ayelet">
                 <img src="photos%20and%20videos/ayelet%202.jpeg" alt="Ayelet portrait">
-                <img src="photos%20and%20videos/IMG_2377.jpeg" alt="Ayelet style">
+                <img src="additional%20photos%20and%20vids/IMG_8391.jpeg" alt="Ayelet with her art">
             </div>
             <div class="about-text reveal">
-                <h3>A Soul Full of <span class="gradient-text">Creativity</span></h3>
-                <p>Ayelet Hashachar is a passionate creative spirit with a deep love for art and drawing. Her canvases overflow with bold colors and raw emotion &mdash; from vibrant pop-art portraits of rock legends like Lennon, Cobain, and Hendrix, to delicate floral wildlife illustrations and abstract mixed-media textures. Every brushstroke carries feeling.</p>
-                <p>Beyond the canvas, Ayelet Hashachar is captivated by music &mdash; rock, soul, and everything that moves the heart. But above all, she is deeply in love with literature. Books and words are woven into her art and her world, as seen in her newspaper collage works where text becomes texture, and stories become visual poetry.</p>
-                <p>It is this unique blend of visual art, musical soul, and literary depth that makes Ayelet Hashachar's work so layered, so emotional, and so unmistakably hers.</p>
+                <h3 data-en="A Soul Full of <span class='gradient-text'>Creativity</span>" data-he="&#1504;&#1513;&#1502;&#1492; &#1502;&#1500;&#1488;&#1492; <span class='gradient-text'>&#1497;&#1510;&#1497;&#1512;&#1514;&#1497;&#1493;&#1514;</span>">A Soul Full of <span class="gradient-text">Creativity</span></h3>
+                <p data-en="Ayelet Hashachar is a passionate creative spirit with a deep love for art and drawing. Her canvases overflow with bold colors and raw emotion — from vibrant pop-art portraits of rock legends like Lennon, Cobain, and Hendrix, to delicate floral wildlife illustrations and abstract mixed-media textures. Every brushstroke carries feeling." data-he="&#1488;&#1497;&#1497;&#1500;&#1514; &#1492;&#1513;&#1495;&#1512; &#1492;&#1497;&#1488; &#1512;&#1493;&#1495; &#1497;&#1510;&#1497;&#1512;&#1514;&#1497;&#1514; &#1506;&#1501; &#1488;&#1492;&#1489;&#1492; &#1506;&#1502;&#1493;&#1511;&#1492; &#1500;&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1493;&#1510;&#1497;&#1493;&#1512;. &#1492;&#1511;&#1504;&#1489;&#1505;&#1497;&#1501; &#1513;&#1500;&#1492; &#1490;&#1493;&#1500;&#1513;&#1497;&#1501; &#1502;&#1510;&#1489;&#1506;&#1497;&#1501; &#1504;&#1493;&#1506;&#1494;&#1497;&#1501; &#1493;&#1512;&#1490;&#1513; &#1490;&#1493;&#1500;&#1502;&#1497; — &#1502;&#1491;&#1497;&#1493;&#1511;&#1504;&#1488;&#1493;&#1514; &#1508;&#1493;&#1508;-&#1488;&#1512;&#1496; &#1513;&#1500; &#1488;&#1490;&#1491;&#1493;&#1514; &#1512;&#1493;&#1511; &#1499;&#1502;&#1493; &#1500;&#1504;&#1493;&#1503;, &#1511;&#1493;&#1489;&#1497;&#1497;&#1503; &#1493;&#1492;&#1504;&#1491;&#1512;&#1497;&#1511;&#1505;, &#1491;&#1512;&#1498; &#1488;&#1497;&#1493;&#1512;&#1497; &#1495;&#1497;&#1493;&#1514; &#1489;&#1512; &#1508;&#1512;&#1495;&#1493;&#1504;&#1497;&#1497;&#1501; &#1493;&#1506;&#1491; &#1496;&#1511;&#1505;&#1496;&#1493;&#1512;&#1493;&#1514; &#1502;&#1491;&#1497;&#1492; &#1502;&#1513;&#1493;&#1500;&#1489;&#1514;. &#1499;&#1500; &#1502;&#1513;&#1497;&#1499;&#1514; &#1502;&#1499;&#1495;&#1493;&#1500; &#1504;&#1493;&#1513;&#1488;&#1514; &#1512;&#1490;&#1513;.">Ayelet Hashachar is a passionate creative spirit with a deep love for art and drawing. Her canvases overflow with bold colors and raw emotion — from vibrant pop-art portraits of rock legends like Lennon, Cobain, and Hendrix, to delicate floral wildlife illustrations and abstract mixed-media textures. Every brushstroke carries feeling.</p>
+                <p data-en="Beyond the canvas, Ayelet Hashachar is captivated by music — rock, soul, and everything that moves the heart. But above all, she is deeply in love with literature. Books and words are woven into her art and her world, as seen in her newspaper collage works where text becomes texture, and stories become visual poetry." data-he="&#1502;&#1506;&#1489;&#1512; &#1500;&#1511;&#1504;&#1489;&#1505;, &#1488;&#1497;&#1497;&#1500;&#1514; &#1492;&#1513;&#1495;&#1512; &#1502;&#1493;&#1511;&#1505;&#1502;&#1514; &#1502;&#1502;&#1493;&#1494;&#1497;&#1511;&#1492; — &#1512;&#1493;&#1511;, &#1505;&#1493;&#1500;, &#1493;&#1499;&#1500; &#1502;&#1492; &#1513;&#1502;&#1494;&#1497;&#1494; &#1488;&#1514; &#1492;&#1500;&#1489;. &#1488;&#1489;&#1500; &#1502;&#1506;&#1500; &#1500;&#1499;&#1500;, &#1492;&#1497;&#1488; &#1502;&#1488;&#1493;&#1492;&#1489;&#1514; &#1489;&#1505;&#1508;&#1512;&#1493;&#1514; &#1489;&#1506;&#1497;&#1511;&#1512;. &#1505;&#1508;&#1512;&#1497;&#1501; &#1493;&#1502;&#1497;&#1500;&#1497;&#1501; &#1513;&#1494;&#1493;&#1512;&#1497;&#1501; &#1489;&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1513;&#1500;&#1492; &#1493;&#1489;&#1506;&#1493;&#1500;&#1501; &#1513;&#1500;&#1492;, &#1499;&#1508;&#1497; &#1513;&#1504;&#1497;&#1514;&#1503; &#1500;&#1512;&#1488;&#1493;&#1514; &#1489;&#1506;&#1489;&#1493;&#1491;&#1493;&#1514; &#1492;&#1511;&#1493;&#1500;&#1488;&#1494;' &#1513;&#1500;&#1492; &#1506;&#1500; &#1506;&#1497;&#1514;&#1493;&#1504;&#1497;&#1501;, &#1513;&#1501; &#1496;&#1511;&#1505;&#1496; &#1492;&#1493;&#1508;&#1498; &#1500;&#1496;&#1511;&#1505;&#1496;&#1493;&#1512;&#1492; &#1493;&#1505;&#1497;&#1508;&#1493;&#1512;&#1497;&#1501; &#1492;&#1493;&#1508;&#1499;&#1497;&#1501; &#1500;&#1513;&#1497;&#1512;&#1492; &#1495;&#1494;&#1493;&#1514;&#1497;&#1514;.">Beyond the canvas, Ayelet Hashachar is captivated by music — rock, soul, and everything that moves the heart. But above all, she is deeply in love with literature. Books and words are woven into her art and her world, as seen in her newspaper collage works where text becomes texture, and stories become visual poetry.</p>
+                <p data-en="It is this unique blend of visual art, musical soul, and literary depth that makes Ayelet Hashachar's work so layered, so emotional, and so unmistakably hers." data-he="&#1492;&#1513;&#1497;&#1500;&#1493;&#1489; &#1492;&#1497;&#1497;&#1495;&#1493;&#1491;&#1497; &#1492;&#1494;&#1492; &#1513;&#1500; &#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1495;&#1494;&#1493;&#1514;&#1497;&#1514;, &#1504;&#1513;&#1502;&#1492; &#1502;&#1493;&#1494;&#1497;&#1511;&#1500;&#1497;&#1514; &#1493;&#1506;&#1493;&#1502;&#1511; &#1505;&#1508;&#1512;&#1493;&#1514;&#1497; &#1492;&#1493;&#1488; &#1502;&#1492; &#1513;&#1492;&#1493;&#1508;&#1498; &#1488;&#1514; &#1492;&#1506;&#1489;&#1493;&#1491;&#1493;&#1514; &#1513;&#1500; &#1488;&#1497;&#1497;&#1500;&#1514; &#1492;&#1513;&#1495;&#1512; &#1500;&#1499;&#1500; &#1499;&#1498; &#1512;&#1489;-&#1513;&#1499;&#1489;&#1514;&#1497;&#1493;&#1514;, &#1512;&#1490;&#1513;&#1497;&#1493;&#1514; &#1493;&#1497;&#1497;&#1495;&#1493;&#1491;&#1497;&#1493;&#1514;.">It is this unique blend of visual art, musical soul, and literary depth that makes Ayelet Hashachar's work so layered, so emotional, and so unmistakably hers.</p>
                 <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="50">0</div>
-                        <div class="stat-label">Artworks</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="7">0</div>
-                        <div class="stat-label">Techniques</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-count="100">0</div>
-                        <div class="stat-label">Colors Used</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-number" data-count="50">0</div><div class="stat-label" data-en="Artworks" data-he="&#1497;&#1510;&#1497;&#1512;&#1493;&#1514;">Artworks</div></div>
+                    <div class="stat-item"><div class="stat-number" data-count="7">0</div><div class="stat-label" data-en="Techniques" data-he="&#1496;&#1499;&#1504;&#1497;&#1511;&#1493;&#1514;">Techniques</div></div>
+                    <div class="stat-item"><div class="stat-number" data-count="100">0</div><div class="stat-label" data-en="Colors Used" data-he="&#1510;&#1489;&#1506;&#1497;&#1501;">Colors Used</div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- Gallery -->
     <section id="gallery">
         <div class="section-header reveal">
-            <h2>The <span class="gradient-text">Gallery</span></h2>
-            <p>A curated collection of original works &mdash; each piece a unique exploration of color, form, and emotion</p>
+            <h2 data-en="The <span class='gradient-text'>Gallery</span>" data-he="<span class='gradient-text'>&#1492;&#1490;&#1500;&#1512;&#1497;&#1492;</span>">The <span class="gradient-text">Gallery</span></h2>
+            <p data-en="A curated collection of original works" data-he="&#1488;&#1493;&#1505;&#1507; &#1502;&#1488;&#1510;&#1512; &#1513;&#1500; &#1506;&#1489;&#1493;&#1491;&#1493;&#1514; &#1502;&#1511;&#1493;&#1512;&#1497;&#1493;&#1514;">A curated collection of original works</p>
         </div>
         <div class="gallery-filter reveal">
-            <button class="filter-btn active" onclick="filterGallery('all')">All Works</button>
-            <button class="filter-btn" onclick="filterGallery('mixed-media')">Mixed Media</button>
-            <button class="filter-btn" onclick="filterGallery('portrait')">Portraits</button>
-            <button class="filter-btn" onclick="filterGallery('animal')">Animals</button>
-            <button class="filter-btn" onclick="filterGallery('pop-art')">Pop Art</button>
+            <button class="filter-btn active" onclick="filterGallery('all')" data-en="All Works" data-he="&#1492;&#1499;&#1500;">All Works</button>
+            <button class="filter-btn" onclick="filterGallery('pop-art')" data-en="Pop Art" data-he="&#1508;&#1493;&#1508; &#1488;&#1512;&#1496;">Pop Art</button>
+            <button class="filter-btn" onclick="filterGallery('portrait')" data-en="Portraits" data-he="&#1491;&#1497;&#1493;&#1511;&#1504;&#1488;&#1493;&#1514;">Portraits</button>
+            <button class="filter-btn" onclick="filterGallery('animal')" data-en="Animals" data-he="&#1495;&#1497;&#1493;&#1514;">Animals</button>
+            <button class="filter-btn" onclick="filterGallery('mixed-media')" data-en="Mixed Media" data-he="&#1502;&#1491;&#1497;&#1492; &#1502;&#1513;&#1493;&#1500;&#1489;&#1514;">Mixed Media</button>
+            <button class="filter-btn" onclick="filterGallery('illustration')" data-en="Illustration" data-he="&#1488;&#1497;&#1493;&#1512;">Illustration</button>
         </div>
-        <div class="gallery-grid">
-            <div class="gallery-card reveal" data-cat="mixed-media" onclick="openLightbox(0)">
-                <img src="1.jpeg" alt="Purple Bloom">
-                <div class="card-overlay">
-                    <h3>Purple Bloom</h3>
-                    <p>Textured florals with glitter and clay</p>
-                    <span class="badge">Mixed Media</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="portrait" onclick="openLightbox(1)">
-                <img src="3.jpeg" alt="Chromatic Soul">
-                <div class="card-overlay">
-                    <h3>Chromatic Soul</h3>
-                    <p>Bold abstract portrait in vivid color blocks</p>
-                    <span class="badge">Portrait</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="mixed-media" onclick="openLightbox(2)">
-                <img src="4.jpeg" alt="Headlines & Hands">
-                <div class="card-overlay">
-                    <h3>Headlines & Hands</h3>
-                    <p>Ink and paint on newspaper collage</p>
-                    <span class="badge">Mixed Media</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="portrait" onclick="openLightbox(3)">
-                <img src="photos%20and%20videos/IMG_4238.png" alt="Dual Figures">
-                <div class="card-overlay">
-                    <h3>Warm & Cool</h3>
-                    <p>Diptych figure study in contrasting palettes</p>
-                    <span class="badge">Portrait</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="animal" onclick="openLightbox(4)">
-                <img src="photos%20and%20videos/IMG_4239.png" alt="Pink Leopard">
-                <div class="card-overlay">
-                    <h3>Pink Leopard</h3>
-                    <p>Bold feline portrait with signature spots</p>
-                    <span class="badge">Animal</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="animal" onclick="openLightbox(5)">
-                <img src="photos%20and%20videos/IMG_4240.png" alt="Floral Tiger">
-                <div class="card-overlay">
-                    <h3>Floral Tiger</h3>
-                    <p>Tiger adorned with botanical illustrations</p>
-                    <span class="badge">Animal</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="pop-art" onclick="openLightbox(6)">
-                <img src="photos%20and%20videos/IMG_4241.png" alt="Rock Legends">
-                <div class="card-overlay">
-                    <h3>Rock Legends Wall</h3>
-                    <p>Lennon, Cobain, Hendrix, Bowie &amp; more</p>
-                    <span class="badge">Pop Art</span>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-cat="portrait" onclick="openLightbox(7)">
-                <img src="2.jpeg" alt="The Studio">
-                <div class="card-overlay">
-                    <h3>The Studio</h3>
-                    <p>The creative process in action</p>
-                    <span class="badge">Behind the Scenes</span>
-                </div>
-            </div>
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
     <!-- Lightbox -->
@@ -1024,190 +345,70 @@
         <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">&#8249;</button>
         <img id="lightboxImg" src="" alt="">
         <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">&#8250;</button>
-        <div class="lightbox-caption">
-            <h3 id="lightboxTitle"></h3>
-            <p id="lightboxDesc"></p>
-        </div>
+        <div class="lightbox-caption"><h3 id="lightboxTitle"></h3><p id="lightboxDesc"></p></div>
     </div>
 
-    <!-- Videos Section -->
+    <!-- Videos -->
     <section id="videos">
         <div class="section-header reveal">
-            <h2>In <span class="gradient-text">Motion</span></h2>
-            <p>Watch the art come to life &mdash; process videos, time-lapses, and studio moments</p>
+            <h2 data-en="In <span class='gradient-text'>Motion</span>" data-he="&#1489;<span class='gradient-text'>&#1514;&#1504;&#1493;&#1506;&#1492;</span>">In <span class="gradient-text">Motion</span></h2>
+            <p data-en="Watch the art come to life" data-he="&#1510;&#1508;&#1493; &#1489;&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1502;&#1514;&#1506;&#1493;&#1512;&#1512;&#1514; &#1500;&#1495;&#1497;&#1497;&#1501;">Watch the art come to life</p>
         </div>
         <div class="video-grid">
-            <div class="video-card reveal">
-                <video controls preload="metadata" playsinline>
-                    <source src="photos%20and%20videos/IMG_3823.mp4" type="video/mp4">
-                </video>
-                <div class="video-info">
-                    <h3>Studio Session</h3>
-                    <p>Creating art in the studio</p>
-                </div>
-            </div>
-            <div class="video-card reveal">
-                <video controls preload="metadata" playsinline>
-                    <source src="photos%20and%20videos/IMG_3828.mp4" type="video/mp4">
-                </video>
-                <div class="video-info">
-                    <h3>Work in Progress</h3>
-                    <p>Watching a piece evolve</p>
-                </div>
-            </div>
-            <div class="video-card reveal">
-                <video controls preload="metadata" playsinline>
-                    <source src="photos%20and%20videos/FullSizeRender.mp4" type="video/mp4">
-                </video>
-                <div class="video-info">
-                    <h3>The Process</h3>
-                    <p>From blank canvas to finished work</p>
-                </div>
-            </div>
-            <div class="video-card reveal">
-                <video controls preload="metadata" playsinline>
-                    <source src="photos%20and%20videos/71c0b2f7f0924db3b1dee8765b998e2a.mp4" type="video/mp4">
-                </video>
-                <div class="video-info">
-                    <h3>Art Reel</h3>
-                    <p>A collection of art highlights</p>
-                </div>
-            </div>
-            <div class="video-card reveal">
-                <video controls preload="metadata" playsinline>
-                    <source src="photos%20and%20videos/v14044g50000d3pt58fog65i2lr7k2h0.mp4" type="video/mp4">
-                </video>
-                <div class="video-info">
-                    <h3>Creative Flow</h3>
-                    <p>Art in motion</p>
-                </div>
-            </div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="photos%20and%20videos/IMG_3823.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Studio Session" data-he="&#1505;&#1513;&#1503; &#1489;&#1505;&#1496;&#1493;&#1491;&#1497;&#1493;">Studio Session</h3><p data-en="Creating in the studio" data-he="&#1497;&#1510;&#1497;&#1512;&#1492; &#1489;&#1505;&#1496;&#1493;&#1491;&#1497;&#1493;">Creating in the studio</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="photos%20and%20videos/IMG_3828.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Work in Progress" data-he="&#1506;&#1489;&#1493;&#1491;&#1492; &#1489;&#1514;&#1492;&#1500;&#1497;&#1498;">Work in Progress</h3><p data-en="Watching a piece evolve" data-he="&#1510;&#1493;&#1508;&#1497;&#1501; &#1489;&#1497;&#1510;&#1497;&#1512;&#1492; &#1502;&#1514;&#1508;&#1514;&#1495;&#1514;">Watching a piece evolve</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="photos%20and%20videos/FullSizeRender.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="The Process" data-he="&#1492;&#1514;&#1492;&#1500;&#1497;&#1498;">The Process</h3><p data-en="From blank canvas to finished work" data-he="&#1502;&#1511;&#1504;&#1489;&#1505; &#1512;&#1497;&#1511; &#1500;&#1497;&#1510;&#1497;&#1512;&#1492; &#1502;&#1493;&#1513;&#1500;&#1502;&#1514;">From blank canvas to finished work</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="photos%20and%20videos/71c0b2f7f0924db3b1dee8765b998e2a.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Art Reel" data-he="&#1512;&#1497;&#1500; &#1488;&#1493;&#1502;&#1504;&#1493;&#1514;">Art Reel</h3><p data-en="Art highlights" data-he="&#1512;&#1490;&#1506;&#1497; &#1488;&#1493;&#1502;&#1504;&#1493;&#1514;">Art highlights</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="photos%20and%20videos/v14044g50000d3pt58fog65i2lr7k2h0.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Creative Flow" data-he="&#1494;&#1512;&#1497;&#1502;&#1492; &#1497;&#1510;&#1497;&#1512;&#1514;&#1497;&#1514;">Creative Flow</h3><p data-en="Art in motion" data-he="&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1489;&#1514;&#1504;&#1493;&#1506;&#1492;">Art in motion</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="additional%20photos%20and%20vids/29d65872d8844a1b935b65441ef51767.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Painting Close-Up" data-he="&#1510;&#1497;&#1493;&#1512; &#1502;&#1511;&#1512;&#1493;&#1489;">Painting Close-Up</h3><p data-en="Detail and texture" data-he="&#1508;&#1512;&#1496;&#1497;&#1501; &#1493;&#1496;&#1511;&#1505;&#1496;&#1493;&#1512;&#1492;">Detail and texture</p></div></div>
+            <div class="video-card reveal"><video controls preload="metadata" playsinline><source src="additional%20photos%20and%20vids/vclassic%202023-09-13%20125006.618.mp4" type="video/mp4"></video><div class="video-info"><h3 data-en="Classic Session" data-he="&#1505;&#1513;&#1503; &#1511;&#1500;&#1488;&#1505;&#1497;">Classic Session</h3><p data-en="A timeless creative moment" data-he="&#1512;&#1490;&#1506; &#1497;&#1510;&#1497;&#1512;&#1514;&#1497; &#1504;&#1510;&#1495;&#1497;">A timeless creative moment</p></div></div>
         </div>
     </section>
 
-    <!-- Memory Game Section -->
+    <!-- Game -->
     <section id="game">
         <div class="section-header reveal">
-            <h2>Art <span class="gradient-text">Memory Game</span></h2>
-            <p>Think you know Ayelet Hashachar's art? Match the pairs to test your memory. Flip cards to find matching artworks!</p>
+            <h2 data-en="Art <span class='gradient-text'>Memory Game</span>" data-he="&#1502;&#1513;&#1495;&#1511; <span class='gradient-text'>&#1494;&#1497;&#1499;&#1512;&#1493;&#1503; &#1488;&#1493;&#1502;&#1504;&#1493;&#1514;&#1497;</span>">Art <span class="gradient-text">Memory Game</span></h2>
+            <p data-en="Match the pairs to test your memory!" data-he="!&#1492;&#1514;&#1488;&#1497;&#1502;&#1493; &#1494;&#1493;&#1490;&#1493;&#1514; &#1493;&#1489;&#1491;&#1511;&#1493; &#1488;&#1514; &#1492;&#1494;&#1497;&#1499;&#1512;&#1493;&#1503; &#1513;&#1500;&#1499;&#1501;">Match the pairs to test your memory!</p>
         </div>
         <div class="reveal">
             <div class="game-stats">
-                <div class="game-stat">
-                    <div class="game-stat-value" id="moveCount">0</div>
-                    <div class="game-stat-label">Moves</div>
-                </div>
-                <div class="game-stat">
-                    <div class="game-stat-value" id="matchCount">0</div>
-                    <div class="game-stat-label">Matches</div>
-                </div>
-                <div class="game-stat">
-                    <div class="game-stat-value" id="gameTimer">0:00</div>
-                    <div class="game-stat-label">Time</div>
-                </div>
+                <div class="game-stat"><div class="game-stat-value" id="moveCount">0</div><div class="game-stat-label" data-en="Moves" data-he="&#1502;&#1492;&#1500;&#1499;&#1497;&#1501;">Moves</div></div>
+                <div class="game-stat"><div class="game-stat-value" id="matchCount">0</div><div class="game-stat-label" data-en="Matches" data-he="&#1492;&#1514;&#1488;&#1502;&#1493;&#1514;">Matches</div></div>
+                <div class="game-stat"><div class="game-stat-value" id="gameTimer">0:00</div><div class="game-stat-label" data-en="Time" data-he="&#1494;&#1502;&#1503;">Time</div></div>
             </div>
             <div class="memory-board" id="memoryBoard"></div>
-            <button class="game-btn" onclick="initGame()">New Game</button>
+            <button class="game-btn" onclick="initGame()" data-en="New Game" data-he="&#1502;&#1513;&#1495;&#1511; &#1495;&#1491;&#1513;">New Game</button>
         </div>
     </section>
+    <div class="game-win-modal" id="winModal"><div class="win-content"><div class="win-stars" id="winStars"></div><h2 class="gradient-text" data-en="You Did It!" data-he="!&#1499;&#1500; &#1492;&#1499;&#1489;&#1493;&#1491;">You Did It!</h2><p id="winMessage"></p><button class="game-btn" onclick="closeWinModal()" data-en="Play Again" data-he="&#1513;&#1495;&#1511;&#1493; &#1513;&#1493;&#1489;">Play Again</button></div></div>
 
-    <!-- Game Win Modal -->
-    <div class="game-win-modal" id="winModal">
-        <div class="win-content">
-            <div class="win-stars" id="winStars"></div>
-            <h2 class="gradient-text">You Did It!</h2>
-            <p id="winMessage"></p>
-            <button class="game-btn" onclick="closeWinModal()">Play Again</button>
-        </div>
-    </div>
-
-    <!-- Color Palette Section -->
+    <!-- Palettes -->
     <section id="palette">
         <div class="section-header reveal">
-            <h2>Color <span class="gradient-text">Palettes</span></h2>
-            <p>Explore the signature colors from each artwork. Click any swatch to copy its hex code.</p>
+            <h2 data-en="Color <span class='gradient-text'>Palettes</span>" data-he="<span class='gradient-text'>&#1508;&#1500;&#1496;&#1493;&#1514;</span> &#1510;&#1489;&#1506;&#1497;&#1501;">Color <span class="gradient-text">Palettes</span></h2>
+            <p data-en="Click any swatch to copy its hex code" data-he="&#1500;&#1495;&#1510;&#1493; &#1506;&#1500; &#1510;&#1489;&#1506; &#1500;&#1492;&#1506;&#1514;&#1511;&#1514; &#1511;&#1493;&#1491; &#1492;&#1510;&#1489;&#1506;">Click any swatch to copy its hex code</p>
         </div>
         <div class="palette-container">
-            <div class="palette-artwork reveal">
-                <h3>Purple Bloom</h3>
-                <div class="color-swatches">
-                    <div class="swatch" style="background:#6B2FA0" onclick="copyColor('#6B2FA0')"><span class="tooltip">#6B2FA0</span></div>
-                    <div class="swatch" style="background:#9B59B6" onclick="copyColor('#9B59B6')"><span class="tooltip">#9B59B6</span></div>
-                    <div class="swatch" style="background:#E74C3C" onclick="copyColor('#E74C3C')"><span class="tooltip">#E74C3C</span></div>
-                    <div class="swatch" style="background:#F5E6CC" onclick="copyColor('#F5E6CC')"><span class="tooltip">#F5E6CC</span></div>
-                    <div class="swatch" style="background:#2ECC71" onclick="copyColor('#2ECC71')"><span class="tooltip">#2ECC71</span></div>
-                    <div class="swatch" style="background:#00BCD4" onclick="copyColor('#00BCD4')"><span class="tooltip">#00BCD4</span></div>
-                </div>
-            </div>
-            <div class="palette-artwork reveal">
-                <h3>Chromatic Soul</h3>
-                <div class="color-swatches">
-                    <div class="swatch" style="background:#00897B" onclick="copyColor('#00897B')"><span class="tooltip">#00897B</span></div>
-                    <div class="swatch" style="background:#283593" onclick="copyColor('#283593')"><span class="tooltip">#283593</span></div>
-                    <div class="swatch" style="background:#E53935" onclick="copyColor('#E53935')"><span class="tooltip">#E53935</span></div>
-                    <div class="swatch" style="background:#F9A825" onclick="copyColor('#F9A825')"><span class="tooltip">#F9A825</span></div>
-                    <div class="swatch" style="background:#7E57C2" onclick="copyColor('#7E57C2')"><span class="tooltip">#7E57C2</span></div>
-                    <div class="swatch" style="background:#FF6F00" onclick="copyColor('#FF6F00')"><span class="tooltip">#FF6F00</span></div>
-                    <div class="swatch" style="background:#E84393" onclick="copyColor('#E84393')"><span class="tooltip">#E84393</span></div>
-                </div>
-            </div>
-            <div class="palette-artwork reveal">
-                <h3>Pink Leopard & Floral Tiger</h3>
-                <div class="color-swatches">
-                    <div class="swatch" style="background:#E84393" onclick="copyColor('#E84393')"><span class="tooltip">#E84393</span></div>
-                    <div class="swatch" style="background:#F8F8F8" onclick="copyColor('#F8F8F8')"><span class="tooltip">#F8F8F8</span></div>
-                    <div class="swatch" style="background:#2D5016" onclick="copyColor('#2D5016')"><span class="tooltip">#2D5016</span></div>
-                    <div class="swatch" style="background:#C9A86C" onclick="copyColor('#C9A86C')"><span class="tooltip">#C9A86C</span></div>
-                    <div class="swatch" style="background:#9B59B6" onclick="copyColor('#9B59B6')"><span class="tooltip">#9B59B6</span></div>
-                    <div class="swatch" style="background:#333333" onclick="copyColor('#333333')"><span class="tooltip">#333333</span></div>
-                </div>
-            </div>
-            <div class="palette-artwork reveal">
-                <h3>Rock Legends Wall</h3>
-                <div class="color-swatches">
-                    <div class="swatch" style="background:#1A1A1A" onclick="copyColor('#1A1A1A')"><span class="tooltip">#1A1A1A</span></div>
-                    <div class="swatch" style="background:#F5E6CC" onclick="copyColor('#F5E6CC')"><span class="tooltip">#F5E6CC</span></div>
-                    <div class="swatch" style="background:#E74C3C" onclick="copyColor('#E74C3C')"><span class="tooltip">#E74C3C</span></div>
-                    <div class="swatch" style="background:#5B86E5" onclick="copyColor('#5B86E5')"><span class="tooltip">#5B86E5</span></div>
-                    <div class="swatch" style="background:#F39C12" onclick="copyColor('#F39C12')"><span class="tooltip">#F39C12</span></div>
-                    <div class="swatch" style="background:#E84393" onclick="copyColor('#E84393')"><span class="tooltip">#E84393</span></div>
-                </div>
-            </div>
-            <div class="palette-artwork reveal">
-                <h3>Headlines & Hands</h3>
-                <div class="color-swatches">
-                    <div class="swatch" style="background:#1A237E" onclick="copyColor('#1A237E')"><span class="tooltip">#1A237E</span></div>
-                    <div class="swatch" style="background:#F5F0E1" onclick="copyColor('#F5F0E1')"><span class="tooltip">#F5F0E1</span></div>
-                    <div class="swatch" style="background:#212121" onclick="copyColor('#212121')"><span class="tooltip">#212121</span></div>
-                    <div class="swatch" style="background:#5D4037" onclick="copyColor('#5D4037')"><span class="tooltip">#5D4037</span></div>
-                    <div class="swatch" style="background:#37474F" onclick="copyColor('#37474F')"><span class="tooltip">#37474F</span></div>
-                </div>
-            </div>
+            <div class="palette-artwork reveal"><h3>Purple Bloom</h3><div class="color-swatches"><div class="swatch" style="background:#6B2FA0" onclick="copyColor('#6B2FA0')"><span class="tooltip">#6B2FA0</span></div><div class="swatch" style="background:#9B59B6" onclick="copyColor('#9B59B6')"><span class="tooltip">#9B59B6</span></div><div class="swatch" style="background:#E74C3C" onclick="copyColor('#E74C3C')"><span class="tooltip">#E74C3C</span></div><div class="swatch" style="background:#F5E6CC" onclick="copyColor('#F5E6CC')"><span class="tooltip">#F5E6CC</span></div><div class="swatch" style="background:#2ECC71" onclick="copyColor('#2ECC71')"><span class="tooltip">#2ECC71</span></div></div></div>
+            <div class="palette-artwork reveal"><h3>Rock Legends</h3><div class="color-swatches"><div class="swatch" style="background:#1A1A1A" onclick="copyColor('#1A1A1A')"><span class="tooltip">#1A1A1A</span></div><div class="swatch" style="background:#F5E6CC" onclick="copyColor('#F5E6CC')"><span class="tooltip">#F5E6CC</span></div><div class="swatch" style="background:#E74C3C" onclick="copyColor('#E74C3C')"><span class="tooltip">#E74C3C</span></div><div class="swatch" style="background:#5B86E5" onclick="copyColor('#5B86E5')"><span class="tooltip">#5B86E5</span></div><div class="swatch" style="background:#F39C12" onclick="copyColor('#F39C12')"><span class="tooltip">#F39C12</span></div><div class="swatch" style="background:#E84393" onclick="copyColor('#E84393')"><span class="tooltip">#E84393</span></div></div></div>
+            <div class="palette-artwork reveal"><h3>Pink Leopard & Floral Tiger</h3><div class="color-swatches"><div class="swatch" style="background:#E84393" onclick="copyColor('#E84393')"><span class="tooltip">#E84393</span></div><div class="swatch" style="background:#F8F8F8" onclick="copyColor('#F8F8F8')"><span class="tooltip">#F8F8F8</span></div><div class="swatch" style="background:#2D5016" onclick="copyColor('#2D5016')"><span class="tooltip">#2D5016</span></div><div class="swatch" style="background:#C9A86C" onclick="copyColor('#C9A86C')"><span class="tooltip">#C9A86C</span></div><div class="swatch" style="background:#9B59B6" onclick="copyColor('#9B59B6')"><span class="tooltip">#9B59B6</span></div></div></div>
+            <div class="palette-artwork reveal"><h3>Chromatic Soul</h3><div class="color-swatches"><div class="swatch" style="background:#00897B" onclick="copyColor('#00897B')"><span class="tooltip">#00897B</span></div><div class="swatch" style="background:#283593" onclick="copyColor('#283593')"><span class="tooltip">#283593</span></div><div class="swatch" style="background:#E53935" onclick="copyColor('#E53935')"><span class="tooltip">#E53935</span></div><div class="swatch" style="background:#F9A825" onclick="copyColor('#F9A825')"><span class="tooltip">#F9A825</span></div><div class="swatch" style="background:#7E57C2" onclick="copyColor('#7E57C2')"><span class="tooltip">#7E57C2</span></div><div class="swatch" style="background:#FF6F00" onclick="copyColor('#FF6F00')"><span class="tooltip">#FF6F00</span></div></div></div>
         </div>
     </section>
+    <div class="copy-toast" id="copyToast">Copied!</div>
 
-    <!-- Copy Toast -->
-    <div class="copy-toast" id="copyToast">Color copied to clipboard!</div>
-
-    <!-- Drawing Canvas Section -->
+    <!-- Canvas -->
     <section id="canvas-section">
         <div class="section-header reveal">
-            <h2>Get <span class="gradient-text">Creative</span></h2>
-            <p>Inspired by Ayelet Hashachar's art? Grab a brush and create your own masterpiece right here.</p>
+            <h2 data-en="Get <span class='gradient-text'>Creative</span>" data-he="&#1492;&#1497;&#1493; <span class='gradient-text'>&#1497;&#1510;&#1497;&#1512;&#1514;&#1497;&#1497;&#1501;</span>">Get <span class="gradient-text">Creative</span></h2>
+            <p data-en="Create your own masterpiece right here" data-he="&#1510;&#1512;&#1493; &#1497;&#1510;&#1497;&#1512;&#1492; &#1502;&#1513;&#1500;&#1499;&#1501; &#1499;&#1488;&#1503;">Create your own masterpiece right here</p>
         </div>
         <div class="canvas-container reveal">
-            <div class="canvas-wrapper">
-                <canvas id="drawingCanvas" width="800" height="500"></canvas>
-            </div>
+            <div class="canvas-wrapper"><canvas id="drawingCanvas" width="800" height="500"></canvas></div>
             <div class="canvas-controls">
-                <label>
-                    <span>Color</span>
-                    <input type="color" id="brushColor" value="#E84393">
-                </label>
-                <label>
-                    <span>Size: <span id="sizeLabel">5</span></span>
-                    <input type="range" id="brushSize" min="1" max="50" value="5">
-                </label>
+                <label><span data-en="Color" data-he="&#1510;&#1489;&#1506;">Color</span><input type="color" id="brushColor" value="#D4728C"></label>
+                <label><span>Size: <span id="sizeLabel">5</span></span><input type="range" id="brushSize" min="1" max="50" value="5"></label>
                 <button class="canvas-btn" id="brushBtn" onclick="setTool('brush')">Brush</button>
                 <button class="canvas-btn" id="eraserBtn" onclick="setTool('eraser')">Eraser</button>
                 <button class="canvas-btn" id="sprayBtn" onclick="setTool('spray')">Spray</button>
@@ -1218,399 +419,172 @@
         </div>
     </section>
 
-    <!-- Quote Section -->
+    <!-- Quote -->
     <section id="quote">
         <div class="quote-content reveal">
             <div class="quote-mark">&ldquo;</div>
-            <p class="quote-text">Art washes away from the soul the dust of everyday life. In every color there is a story, in every line &mdash; a verse, and in every canvas &mdash; a chapter waiting to be read.</p>
+            <p class="quote-text" data-en="Art washes away from the soul the dust of everyday life. In every color there is a story, in every line — a verse, and in every canvas — a chapter waiting to be read." data-he="&#1492;&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1513;&#1493;&#1496;&#1508;&#1514; &#1502;&#1492;&#1504;&#1513;&#1502;&#1492; &#1488;&#1514; &#1488;&#1489;&#1511; &#1492;&#1497;&#1493;&#1502;&#1497;&#1493;&#1501;. &#1489;&#1499;&#1500; &#1510;&#1489;&#1506; &#1497;&#1513; &#1505;&#1497;&#1508;&#1493;&#1512;, &#1489;&#1499;&#1500; &#1511;&#1493; — &#1489;&#1497;&#1514; &#1513;&#1497;&#1512;, &#1493;&#1489;&#1499;&#1500; &#1511;&#1504;&#1489;&#1505; — &#1508;&#1512;&#1511; &#1513;&#1502;&#1495;&#1499;&#1492; &#1513;&#1497;&#1511;&#1512;&#1488;&#1493; &#1488;&#1493;&#1514;&#1493;.">Art washes away from the soul the dust of everyday life. In every color there is a story, in every line — a verse, and in every canvas — a chapter waiting to be read.</p>
             <p class="quote-author">&mdash; Ayelet Hashachar</p>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact -->
     <section id="contact">
         <div class="section-header reveal">
-            <h2>Get in <span class="gradient-text">Touch</span></h2>
-            <p>Interested in a commission, collaboration, or just want to say hello? Drop a message below.</p>
+            <h2 data-en="Get in <span class='gradient-text'>Touch</span>" data-he="<span class='gradient-text'>&#1510;&#1512;&#1493; &#1511;&#1513;&#1512;</span>">Get in <span class="gradient-text">Touch</span></h2>
+            <p data-en="Interested in a commission or collaboration?" data-he="?&#1502;&#1506;&#1493;&#1504;&#1497;&#1497;&#1504;&#1497;&#1501; &#1489;&#1492;&#1494;&#1502;&#1504;&#1492; &#1488;&#1493; &#1513;&#1497;&#1514;&#1493;&#1507; &#1508;&#1506;&#1493;&#1500;&#1492;">Interested in a commission or collaboration?</p>
         </div>
         <div class="contact-form reveal">
-            <div class="form-group">
-                <label>Your Name</label>
-                <input type="text" placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label>Message</label>
-                <textarea placeholder="Tell me about your project or idea..."></textarea>
-            </div>
-            <button class="submit-btn" onclick="handleSubmit(event)">Send Message</button>
+            <div class="form-group"><label data-en="Your Name" data-he="&#1513;&#1501;">Your Name</label><input type="text" id="nameInput" data-en-ph="Enter your name" data-he-ph="&#1492;&#1499;&#1504;&#1497;&#1505;&#1493; &#1488;&#1514; &#1513;&#1502;&#1499;&#1501;" placeholder="Enter your name"></div>
+            <div class="form-group"><label data-en="Email" data-he="&#1488;&#1497;&#1502;&#1497;&#1497;&#1500;">Email</label><input type="email" id="emailInput" data-en-ph="Enter your email" data-he-ph="&#1492;&#1499;&#1504;&#1497;&#1505;&#1493; &#1488;&#1497;&#1502;&#1497;&#1497;&#1500;" placeholder="Enter your email"></div>
+            <div class="form-group"><label data-en="Message" data-he="&#1492;&#1493;&#1491;&#1506;&#1492;">Message</label><textarea id="msgInput" data-en-ph="Tell me about your project..." data-he-ph="...&#1505;&#1508;&#1512;&#1493; &#1500;&#1497; &#1506;&#1500; &#1492;&#1508;&#1512;&#1493;&#1497;&#1511;&#1496; &#1513;&#1500;&#1499;&#1501;" placeholder="Tell me about your project..."></textarea></div>
+            <button class="submit-btn" onclick="handleSubmit(event)" data-en="Send Message" data-he="&#1513;&#1500;&#1495;&#1493; &#1492;&#1493;&#1491;&#1506;&#1492;">Send Message</button>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>Made with <span class="heart">&hearts;</span> for Ayelet Hashachar &copy; 2026</p>
-    </footer>
+    <footer><p>Made with <span class="heart">&hearts;</span> for Ayelet Hashachar &copy; 2026</p></footer>
 
     <script>
+        // ========== Gallery Data ==========
+        const galleryData = [
+            { src: '1.jpeg', en: 'Purple Bloom', he: 'פריחה סגולה', desc_en: 'Mixed media — Textured florals with glitter and clay', desc_he: 'מדיה משולבת — פרחים עם נצנצים וחימר', cat: 'mixed-media' },
+            { src: '3.jpeg', en: 'Chromatic Soul', he: 'נשמה צבעונית', desc_en: 'Abstract portrait in vivid color blocks', desc_he: 'דיוקן מופשט בבלוקים צבעוניים', cat: 'portrait' },
+            { src: '4.jpeg', en: 'Headlines & Hands', he: 'כותרות וידיים', desc_en: 'Ink and paint on newspaper collage', desc_he: 'דיו וצבע על קולאז\' עיתונים', cat: 'mixed-media' },
+            { src: 'photos%20and%20videos/IMG_4238.png', en: 'Warm & Cool', he: 'חם וקר', desc_en: 'Diptych figure study in contrasting palettes', desc_he: 'דיפטיך דמויות בפלטות מנוגדות', cat: 'portrait' },
+            { src: 'photos%20and%20videos/IMG_4239.png', en: 'Pink Leopard', he: 'נמר ורוד', desc_en: 'Bold feline portrait with signature spots', desc_he: 'דיוקן חתולי נועז עם כתמים ורודים', cat: 'animal' },
+            { src: 'photos%20and%20videos/IMG_4240.png', en: 'Floral Tiger', he: 'נמר פרחוני', desc_en: 'Tiger adorned with botanical illustrations', desc_he: 'נמר מעוטר באיורים בוטניים', cat: 'animal' },
+            { src: 'photos%20and%20videos/IMG_4241.png', en: 'Rock Legends Wall', he: 'קיר אגדות הרוק', desc_en: 'Lennon, Cobain, Hendrix, Bowie & more', desc_he: 'לנון, קוביין, הנדריקס, בואי ועוד', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/11720A7E-7CD7-4996-AE58-90C828E5322A.jpeg', en: 'Bob Marley', he: 'בוב מארלי', desc_en: 'Stencil portrait in black and white', desc_he: 'דיוקן סטנסיל בשחור ולבן', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/4767F135-2659-4DD9-8ABE-8B561952C47B.jpeg', en: 'Lennon in Bloom', he: 'לנון בפריחה', desc_en: 'John Lennon with colorful flower background', desc_he: 'ג\'ון לנון על רקע פרחים צבעוניים', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/6B858E3A-6BE2-4C82-8008-AF20A52BDDEA.jpeg', en: 'Red Scream', he: 'צעקה אדומה', desc_en: 'Stencil portrait on crimson background', desc_he: 'דיוקן סטנסיל על רקע ארגמן', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/935115AB-D146-4CAD-9EB3-0B5BF4BD59F0.jpeg', en: 'Blue Gaze', he: 'מבט כחול', desc_en: 'Monochrome blue portrait painting', desc_he: 'ציור דיוקן מונוכרומטי בכחול', cat: 'portrait' },
+            { src: 'additional%20photos%20and%20vids/E153473C-07DE-4FDF-9D4C-A1CC6FD9D0E0.jpeg', en: 'Floral Skull', he: 'גולגולת פרחונית', desc_en: 'Half skull, half flowers — life and death', desc_he: 'חצי גולגולת, חצי פרחים — חיים ומוות', cat: 'illustration' },
+            { src: 'additional%20photos%20and%20vids/E2BD60FB-AD1D-4A36-BC1F-4937A612CCA3.jpeg', en: 'The Shining', he: 'הזוהר', desc_en: 'Jack Nicholson — The Shining tribute', desc_he: 'ג\'ק ניקולסון — מחווה לסרט הזוהר', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/IMG_4242.jpeg', en: 'Marilyn', he: 'מרילין', desc_en: 'Marilyn Monroe pop art on canvas', desc_he: 'מרילין מונרו פופ ארט על קנבס', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/IMG_4244.png', en: 'Kurt Cobain', he: 'קורט קוביין', desc_en: 'Cobain stencil with textured background', desc_he: 'סטנסיל קוביין עם רקע טקסטורה', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/IMG_4245.png', en: 'Jimi Hendrix', he: 'ג\'ימי הנדריקס', desc_en: 'Hendrix silhouette on sunset gradient', desc_he: 'צללית הנדריקס על שקיעה', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/IMG_4246.png', en: 'Here\'s Johnny!', he: '!הנה ג\'וני', desc_en: 'The Shining close-up stencil painting', desc_he: 'ציור סטנסיל תקריב מהזוהר', cat: 'pop-art' },
+            { src: 'additional%20photos%20and%20vids/IMG_4247.png', en: 'Duo Portrait', he: 'דיוקן זוגי', desc_en: 'Abstract couple portrait on orange', desc_he: 'דיוקן זוגי מופשט על כתום', cat: 'portrait' },
+            { src: 'additional%20photos%20and%20vids/IMG_7315.png', en: 'Ink Collection', he: 'אוסף דיו', desc_en: 'Collection of ink drawings and motifs', desc_he: 'אוסף רישומי דיו ומוטיבים', cat: 'illustration' },
+            { src: 'additional%20photos%20and%20vids/D0F2B7FA-C3FE-4D51-B58B-96B76B3AEBA0.jpeg', en: 'Art Exhibition', he: 'תערוכת אומנות', desc_en: 'Full collection on display', desc_he: 'האוסף המלא בתצוגה', cat: 'mixed-media' },
+            { src: 'additional%20photos%20and%20vids/IMG_8391.jpeg', en: 'The Artist', he: 'האמנית', desc_en: 'Ayelet Hashachar with her art', desc_he: 'איילת השחר עם יצירותיה', cat: 'portrait' },
+            { src: '2.jpeg', en: 'The Studio', he: 'הסטודיו', desc_en: 'The creative process in action', desc_he: 'התהליך היצירתי בפעולה', cat: 'mixed-media' },
+        ];
+
+        let currentLang = 'en';
+        let currentSlide = 0;
+
+        // ========== Build Gallery ==========
+        function buildGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            galleryData.forEach((item, i) => {
+                const card = document.createElement('div');
+                card.className = 'gallery-card reveal visible';
+                card.dataset.cat = item.cat;
+                card.onclick = () => openLightbox(i);
+                const title = currentLang === 'he' ? item.he : item.en;
+                const desc = currentLang === 'he' ? item.desc_he : item.desc_en;
+                card.innerHTML = `<img src="${item.src}" alt="${title}" loading="lazy"><div class="card-overlay"><h3>${title}</h3><p>${desc}</p><span class="badge">${item.cat.replace('-',' ')}</span></div>`;
+                grid.appendChild(card);
+            });
+            setupCursorHovers();
+        }
+
+        // ========== Language Toggle ==========
+        function setLang(lang) {
+            currentLang = lang;
+            document.body.classList.toggle('rtl', lang === 'he');
+            document.getElementById('enBtn').classList.toggle('active', lang === 'en');
+            document.getElementById('heBtn').classList.toggle('active', lang === 'he');
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const text = el.getAttribute('data-' + lang);
+                if (text) el.innerHTML = text;
+            });
+            document.querySelectorAll('[data-en-ph]').forEach(el => {
+                el.placeholder = el.getAttribute('data-' + lang + '-ph') || '';
+            });
+            buildGallery();
+        }
+
         // ========== Custom Cursor ==========
         const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-        });
+        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX-10+'px'; cursor.style.top = e.clientY-10+'px'; });
         function setupCursorHovers() {
-            document.querySelectorAll('a, button, .gallery-card, .swatch, .memory-card, .filter-btn').forEach(el => {
+            document.querySelectorAll('a,button,.gallery-card,.swatch,.memory-card,.filter-btn,.lang-btn').forEach(el => {
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
             });
         }
         setupCursorHovers();
 
-        // ========== Navigation ==========
+        // ========== Nav ==========
         const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
+        window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+        document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
 
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('open');
-        }
-        document.querySelectorAll('.nav-links a').forEach(a => {
-            a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
-        });
+        // ========== Parallax ==========
+        window.addEventListener('scroll', () => { const bg = document.getElementById('heroBg'); if(bg) bg.style.transform=`scale(1.1) translateY(${window.scrollY*0.3}px)`; });
 
-        // ========== Parallax Hero ==========
-        window.addEventListener('scroll', () => {
-            const bg = document.getElementById('heroBg');
-            if (bg) bg.style.transform = `scale(1.1) translateY(${window.scrollY * 0.3}px)`;
-        });
-
-        // ========== Scroll Reveal ==========
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
+        // ========== Reveal ==========
+        const observer = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1});
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // ========== Animated Counters ==========
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const target = parseInt(el.dataset.count);
-                    let current = 0;
-                    const increment = target / 40;
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            el.textContent = target + '+';
-                            clearInterval(timer);
-                        } else {
-                            el.textContent = Math.floor(current);
-                        }
-                    }, 40);
-                    counterObserver.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-        document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+        // ========== Counters ==========
+        const cObs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ const el=e.target,t=parseInt(el.dataset.count);let c=0;const inc=t/40;const ti=setInterval(()=>{c+=inc;if(c>=t){el.textContent=t+'+';clearInterval(ti);}else{el.textContent=Math.floor(c);}},40);cObs.unobserve(el);}}); },{threshold:0.5});
+        document.querySelectorAll('.stat-number').forEach(el => cObs.observe(el));
 
         // ========== Gallery Filter ==========
         function filterGallery(cat) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.gallery-card').forEach(card => {
-                if (cat === 'all' || card.dataset.cat === cat) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
             });
         }
 
         // ========== Lightbox ==========
-        const galleryData = [
-            { src: '1.jpeg', title: 'Purple Bloom', desc: 'Mixed media on canvas — Textured florals with glitter and clay elements' },
-            { src: '3.jpeg', title: 'Chromatic Soul', desc: 'Acrylic on canvas — Bold abstract portrait in vivid color blocks' },
-            { src: '4.jpeg', title: 'Headlines & Hands', desc: 'Ink and paint on newspaper — Mixed media portrait collage' },
-            { src: 'photos%20and%20videos/IMG_4238.png', title: 'Warm & Cool', desc: 'Diptych figure study — Contrasting warm and cool palettes' },
-            { src: 'photos%20and%20videos/IMG_4239.png', title: 'Pink Leopard', desc: 'Acrylic on canvas — Bold feline portrait with signature pink spots' },
-            { src: 'photos%20and%20videos/IMG_4240.png', title: 'Floral Tiger', desc: 'Acrylic on canvas — Tiger adorned with botanical flower illustrations' },
-            { src: 'photos%20and%20videos/IMG_4241.png', title: 'Rock Legends Wall', desc: 'Mixed media — Lennon, Cobain, Hendrix, Bowie, and more iconic portraits' },
-            { src: '2.jpeg', title: 'The Studio', desc: 'Behind the scenes — The creative process surrounded by art' }
-        ];
-        let currentSlide = 0;
-
-        function openLightbox(index) {
-            currentSlide = index;
-            updateLightbox();
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        function navigateLightbox(dir) {
-            currentSlide = (currentSlide + dir + galleryData.length) % galleryData.length;
-            updateLightbox();
-        }
-        function updateLightbox() {
-            const item = galleryData[currentSlide];
-            document.getElementById('lightboxImg').src = item.src;
-            document.getElementById('lightboxTitle').textContent = item.title;
-            document.getElementById('lightboxDesc').textContent = item.desc;
-        }
-        document.addEventListener('keydown', e => {
-            if (!document.getElementById('lightbox').classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') navigateLightbox(-1);
-            if (e.key === 'ArrowRight') navigateLightbox(1);
-        });
+        function openLightbox(i) { currentSlide=i; updateLightbox(); document.getElementById('lightbox').classList.add('active'); document.body.style.overflow='hidden'; }
+        function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow=''; }
+        function navigateLightbox(d) { currentSlide=(currentSlide+d+galleryData.length)%galleryData.length; updateLightbox(); }
+        function updateLightbox() { const it=galleryData[currentSlide]; document.getElementById('lightboxImg').src=it.src; document.getElementById('lightboxTitle').textContent=currentLang==='he'?it.he:it.en; document.getElementById('lightboxDesc').textContent=currentLang==='he'?it.desc_he:it.desc_en; }
+        document.addEventListener('keydown', e => { if(!document.getElementById('lightbox').classList.contains('active'))return; if(e.key==='Escape')closeLightbox(); if(e.key==='ArrowLeft')navigateLightbox(-1); if(e.key==='ArrowRight')navigateLightbox(1); });
 
         // ========== Color Copy ==========
-        function copyColor(hex) {
-            navigator.clipboard.writeText(hex).then(() => {
-                const toast = document.getElementById('copyToast');
-                toast.textContent = `Copied ${hex} to clipboard!`;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            });
-        }
+        function copyColor(hex) { navigator.clipboard.writeText(hex).then(()=>{ const t=document.getElementById('copyToast'); t.textContent=`Copied ${hex}!`; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }); }
 
         // ========== Memory Game ==========
-        const gameImages = [
-            { src: '1.jpeg', name: 'Purple Bloom' },
-            { src: '3.jpeg', name: 'Chromatic Soul' },
-            { src: '4.jpeg', name: 'Headlines & Hands' },
-            { src: 'photos%20and%20videos/IMG_4238.png', name: 'Warm & Cool' },
-            { src: 'photos%20and%20videos/IMG_4239.png', name: 'Pink Leopard' },
-            { src: 'photos%20and%20videos/IMG_4240.png', name: 'Floral Tiger' },
-            { src: 'photos%20and%20videos/IMG_4241.png', name: 'Rock Legends' },
-            { src: '2.jpeg', name: 'The Studio' }
-        ];
-
-        let gameCards = [];
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let moves = 0;
-        let gameTimerInterval = null;
-        let gameSeconds = 0;
-        let gameLocked = false;
-
-        function initGame() {
-            clearInterval(gameTimerInterval);
-            matchedPairs = 0;
-            moves = 0;
-            gameSeconds = 0;
-            gameLocked = false;
-            flippedCards = [];
-            document.getElementById('moveCount').textContent = '0';
-            document.getElementById('matchCount').textContent = '0';
-            document.getElementById('gameTimer').textContent = '0:00';
-
-            // Pick 8 random images, create pairs
-            const shuffledImgs = [...gameImages].sort(() => Math.random() - 0.5).slice(0, 8);
-            gameCards = [...shuffledImgs, ...shuffledImgs]
-                .map((img, i) => ({ ...img, id: i }))
-                .sort(() => Math.random() - 0.5);
-
-            const board = document.getElementById('memoryBoard');
-            board.innerHTML = '';
-            gameCards.forEach((card, index) => {
-                const el = document.createElement('div');
-                el.className = 'memory-card';
-                el.dataset.index = index;
-                el.innerHTML = `
-                    <div class="memory-card-inner">
-                        <div class="memory-card-front">
-                            <img src="${card.src}" alt="${card.name}">
-                        </div>
-                        <div class="memory-card-back"></div>
-                    </div>
-                `;
-                el.addEventListener('click', () => flipCard(index));
-                board.appendChild(el);
-            });
-
-            setupCursorHovers();
-
-            // Start timer on first click
-            gameTimerInterval = null;
-        }
-
-        function startTimerIfNeeded() {
-            if (gameTimerInterval) return;
-            gameTimerInterval = setInterval(() => {
-                gameSeconds++;
-                const m = Math.floor(gameSeconds / 60);
-                const s = gameSeconds % 60;
-                document.getElementById('gameTimer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function flipCard(index) {
-            if (gameLocked) return;
-            const cardEl = document.querySelector(`.memory-card[data-index="${index}"]`);
-            if (!cardEl || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
-            if (flippedCards.length >= 2) return;
-
-            startTimerIfNeeded();
-            cardEl.classList.add('flipped');
-            flippedCards.push({ index, card: gameCards[index], el: cardEl });
-
-            if (flippedCards.length === 2) {
-                moves++;
-                document.getElementById('moveCount').textContent = moves;
-                checkMatch();
-            }
-        }
-
-        function checkMatch() {
-            const [a, b] = flippedCards;
-            if (a.card.src === b.card.src) {
-                a.el.classList.add('matched');
-                b.el.classList.add('matched');
-                matchedPairs++;
-                document.getElementById('matchCount').textContent = matchedPairs;
-                flippedCards = [];
-                if (matchedPairs === 8) {
-                    clearInterval(gameTimerInterval);
-                    setTimeout(showWin, 600);
-                }
-            } else {
-                gameLocked = true;
-                setTimeout(() => {
-                    a.el.classList.remove('flipped');
-                    b.el.classList.remove('flipped');
-                    flippedCards = [];
-                    gameLocked = false;
-                }, 900);
-            }
-        }
-
-        function showWin() {
-            const stars = moves <= 12 ? 3 : moves <= 18 ? 2 : 1;
-            const starStr = Array(stars).fill('\u2B50').join('');
-            document.getElementById('winStars').textContent = starStr;
-            const m = Math.floor(gameSeconds / 60);
-            const s = gameSeconds % 60;
-            document.getElementById('winMessage').textContent =
-                `You matched all pairs in ${moves} moves and ${m}:${s.toString().padStart(2, '0')}!`;
-            document.getElementById('winModal').classList.add('active');
-        }
-
-        function closeWinModal() {
-            document.getElementById('winModal').classList.remove('active');
-            initGame();
-        }
-
-        // Init game on load
+        const gameImages = galleryData.filter(g=>g.cat!=='mixed-media').slice(0,8).map(g=>({src:g.src,name:g.en}));
+        let gameCards=[],flippedCards=[],matchedPairs=0,moves=0,gameTimerInterval=null,gameSeconds=0,gameLocked=false;
+        function initGame(){ clearInterval(gameTimerInterval); matchedPairs=0;moves=0;gameSeconds=0;gameLocked=false;flippedCards=[]; document.getElementById('moveCount').textContent='0'; document.getElementById('matchCount').textContent='0'; document.getElementById('gameTimer').textContent='0:00'; gameCards=[...gameImages,...gameImages].map((img,i)=>({...img,id:i})).sort(()=>Math.random()-0.5); const b=document.getElementById('memoryBoard');b.innerHTML=''; gameCards.forEach((c,i)=>{const el=document.createElement('div');el.className='memory-card';el.dataset.index=i;el.innerHTML=`<div class="memory-card-inner"><div class="memory-card-front"><img src="${c.src}" alt="${c.name}"></div><div class="memory-card-back"></div></div>`;el.addEventListener('click',()=>flipCard(i));b.appendChild(el);}); setupCursorHovers(); gameTimerInterval=null; }
+        function startTimer(){ if(gameTimerInterval)return; gameTimerInterval=setInterval(()=>{gameSeconds++;const m=Math.floor(gameSeconds/60),s=gameSeconds%60;document.getElementById('gameTimer').textContent=`${m}:${s.toString().padStart(2,'0')}`;},1000); }
+        function flipCard(i){ if(gameLocked)return;const el=document.querySelector(`.memory-card[data-index="${i}"]`);if(!el||el.classList.contains('flipped')||el.classList.contains('matched'))return;if(flippedCards.length>=2)return; startTimer();el.classList.add('flipped');flippedCards.push({index:i,card:gameCards[i],el});if(flippedCards.length===2){moves++;document.getElementById('moveCount').textContent=moves;checkMatch();} }
+        function checkMatch(){ const[a,b]=flippedCards;if(a.card.src===b.card.src){a.el.classList.add('matched');b.el.classList.add('matched');matchedPairs++;document.getElementById('matchCount').textContent=matchedPairs;flippedCards=[];if(matchedPairs===8){clearInterval(gameTimerInterval);setTimeout(showWin,600);}}else{gameLocked=true;setTimeout(()=>{a.el.classList.remove('flipped');b.el.classList.remove('flipped');flippedCards=[];gameLocked=false;},900);} }
+        function showWin(){ const s=moves<=12?3:moves<=18?2:1; document.getElementById('winStars').textContent=Array(s).fill('\u2B50').join(''); const m=Math.floor(gameSeconds/60),sec=gameSeconds%60; document.getElementById('winMessage').textContent=currentLang==='he'?`התאמתם את כל הזוגות ב-${moves} מהלכים ו-${m}:${sec.toString().padStart(2,'0')}!`:`Matched all pairs in ${moves} moves and ${m}:${sec.toString().padStart(2,'0')}!`; document.getElementById('winModal').classList.add('active'); }
+        function closeWinModal(){ document.getElementById('winModal').classList.remove('active'); initGame(); }
         initGame();
 
-        // ========== Drawing Canvas ==========
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
-        let drawing = false;
-        let currentTool = 'brush';
-        let hue = 0;
-
-        function resizeCanvas() {
-            const maxW = Math.min(800, window.innerWidth - 60);
-            canvas.width = maxW;
-            canvas.height = maxW * 0.625;
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        resizeCanvas();
-
-        canvas.addEventListener('mousedown', startDraw);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDraw);
-        canvas.addEventListener('mouseleave', stopDraw);
-        canvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(getTouchPos(e)); });
-        canvas.addEventListener('touchmove', e => { e.preventDefault(); draw(getTouchPos(e)); });
-        canvas.addEventListener('touchend', stopDraw);
-
-        function getTouchPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            return { offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top };
-        }
-        function startDraw(e) { drawing = true; draw(e); }
-        function draw(e) {
-            if (!drawing) return;
-            const x = e.offsetX, y = e.offsetY;
-            const size = document.getElementById('brushSize').value;
-            const color = document.getElementById('brushColor').value;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            if (currentTool === 'brush') {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = color;
-                ctx.lineWidth = size;
-                ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
-            } else if (currentTool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.lineWidth = size * 3;
-                ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
-                ctx.globalCompositeOperation = 'source-over';
-            } else if (currentTool === 'spray') {
-                ctx.globalCompositeOperation = 'source-over';
-                for (let i = 0; i < 20; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const radius = Math.random() * size * 2;
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius, 1, 1);
-                }
-            } else if (currentTool === 'rainbow') {
-                ctx.globalCompositeOperation = 'source-over';
-                hue = (hue + 2) % 360;
-                ctx.strokeStyle = `hsl(${hue}, 80%, 55%)`;
-                ctx.lineWidth = size;
-                ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
-            }
-        }
-        function stopDraw() { drawing = false; ctx.beginPath(); }
-        function setTool(tool) {
-            currentTool = tool;
-            document.querySelectorAll('.canvas-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(tool + 'Btn');
-            if (btn) btn.classList.add('active');
-        }
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        function downloadCanvas() {
-            const link = document.createElement('a');
-            link.download = 'my-ayelet-hashachar-inspired-art.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        }
-        document.getElementById('brushSize').addEventListener('input', function() {
-            document.getElementById('sizeLabel').textContent = this.value;
-        });
+        // ========== Canvas ==========
+        const canvas=document.getElementById('drawingCanvas'),ctx=canvas.getContext('2d');let drawing=false,currentTool='brush',hue=0;
+        function resizeCanvas(){const w=Math.min(800,window.innerWidth-60);canvas.width=w;canvas.height=w*0.625;ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);}resizeCanvas();
+        canvas.addEventListener('mousedown',e=>{drawing=true;drawAt(e);});canvas.addEventListener('mousemove',drawAt);canvas.addEventListener('mouseup',()=>{drawing=false;ctx.beginPath();});canvas.addEventListener('mouseleave',()=>{drawing=false;ctx.beginPath();});
+        canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;drawAt(touchPos(e));});canvas.addEventListener('touchmove',e=>{e.preventDefault();drawAt(touchPos(e));});canvas.addEventListener('touchend',()=>{drawing=false;ctx.beginPath();});
+        function touchPos(e){const r=canvas.getBoundingClientRect(),t=e.touches[0];return{offsetX:t.clientX-r.left,offsetY:t.clientY-r.top};}
+        function drawAt(e){if(!drawing)return;const x=e.offsetX,y=e.offsetY,sz=document.getElementById('brushSize').value,col=document.getElementById('brushColor').value;ctx.lineCap='round';ctx.lineJoin='round';if(currentTool==='brush'){ctx.globalCompositeOperation='source-over';ctx.strokeStyle=col;ctx.lineWidth=sz;ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);}else if(currentTool==='eraser'){ctx.globalCompositeOperation='destination-out';ctx.lineWidth=sz*3;ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);ctx.globalCompositeOperation='source-over';}else if(currentTool==='spray'){ctx.globalCompositeOperation='source-over';for(let i=0;i<20;i++){const a=Math.random()*Math.PI*2,r=Math.random()*sz*2;ctx.fillStyle=col;ctx.fillRect(x+Math.cos(a)*r,y+Math.sin(a)*r,1,1);}}else if(currentTool==='rainbow'){ctx.globalCompositeOperation='source-over';hue=(hue+2)%360;ctx.strokeStyle=`hsl(${hue},80%,55%)`;ctx.lineWidth=sz;ctx.lineTo(x,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y);}}
+        function setTool(t){currentTool=t;document.querySelectorAll('.canvas-btn').forEach(b=>b.classList.remove('active'));const btn=document.getElementById(t+'Btn');if(btn)btn.classList.add('active');}
+        function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);}
+        function downloadCanvas(){const l=document.createElement('a');l.download='ayelet-hashachar-art.png';l.href=canvas.toDataURL();l.click();}
+        document.getElementById('brushSize').addEventListener('input',function(){document.getElementById('sizeLabel').textContent=this.value;});
         setTool('brush');
 
-        // ========== Contact Form ==========
-        function handleSubmit(e) {
-            e.preventDefault();
-            const btn = e.target;
-            btn.textContent = 'Message Sent!';
-            btn.style.background = 'linear-gradient(135deg, #2ECC71, #00897B)';
-            setTimeout(() => {
-                btn.textContent = 'Send Message';
-                btn.style.background = '';
-            }, 3000);
-        }
+        // ========== Contact ==========
+        function handleSubmit(e){e.preventDefault();const btn=e.target;const msg=currentLang==='he'?'!ההודעה נשלחה':'Message Sent!';btn.textContent=msg;btn.style.background='linear-gradient(135deg,#2ECC71,#00897B)';setTimeout(()=>{btn.textContent=btn.getAttribute('data-'+currentLang);btn.style.background='';},3000);}
+
+        // ========== Init ==========
+        buildGallery();
     </script>
 </body>
 </html>
